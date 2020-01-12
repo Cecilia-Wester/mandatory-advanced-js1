@@ -3,25 +3,31 @@ import React from 'react';
 class Login extends React.Component {
     constructor(props){
         super(props);
-        this.state = {UserName: ''}
-        this.onSubmit = this.onSubmit.bind(this)
-        this.onChange = this.onChange.bind(this)
+        this.state = {userName: ''};
+        this.onSubmit = this.onSubmit.bind(this);
+        this.onChange = this.onChange.bind(this);
     }
 
     onSubmit(e){
-        e.preventDefault()
+        e.preventDefault();
+        let regEx = /^[A-ZÅÄÖa-zåäö\d\s-_]{1,12}$/;
+        if(regEx.test(this.state.userName)){
+            this.props.onSubmitUserName(this.state.userName);
+        } 
     }
     
-    onChange(event) {
-        this.setState({name: event.target.value});
+    onChange(e) {
+        this.setState({userName: e.target.value});
+
     }
 
     render(){
         return(
             <>
                 <p>Enter username:</p>
-                <form onSubmit = {this.onSubmit}>
-                <input value={this.props.UserName} type='text' onChange= {this.onChange}/>
+                <form onSubmit={this.onSubmit}>
+                    <input value={this.props.userName} type='text' onChange= {this.onChange}/>
+                    <button >Log in</button>
                 </form>
             </>
         );
