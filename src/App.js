@@ -27,7 +27,7 @@ class App extends React.Component {
 
   render(){
     return (
-      <div>
+      <div className = "page">
         {
           this.state.loggedIn?<Chat logOut={this.logOut}/>:<Login onSubmitUserName={this.onSubmitUserName}/>
         }

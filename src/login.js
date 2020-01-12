@@ -26,7 +26,7 @@ class Login extends React.Component {
             <>
                 <p>Enter username:</p>
                 <form onSubmit={this.onSubmit}>
-                    <input value={this.props.userName} type='text' onChange= {this.onChange}/>
+                    <input value={this.props.userName} type='text' onChange= {this.onChange}/><br />
                     <button >Log in</button>
                 </form>
             </>
