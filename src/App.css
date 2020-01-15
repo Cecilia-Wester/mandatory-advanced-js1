@@ -1,22 +1,45 @@
 .page{
     width: 70vw;
-    height: 80vh;
+
     margin: auto;
     display: flex;
     flex-wrap: wrap;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    background-image: url("https://images.unsplash.com/photo-1532274402911-5a369e4c4bb5?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1050&q=80");
     background-repeat: no-repeat;
     font-weight: bold;
     font-size: large;
 }
 
-
-
-
-.chat{
+.loginBox{
+    height: 300px;
+    width: 250px;
+    margin-top: 200px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
     background-color:rgba(143, 21, 180, 0.534);
 }
 
+.errorMessage{
+    font-size: 15px;
+    font-weight: lighter;
+}
+
+.displayMessages{
+    background-color:rgba(143, 21, 180, 0.534);
+    overflow-y: scroll;
+    word-break: break-word;
+    height: 80vh;
+}
+
+.enterMessageBox{
+    display: flex;
+}
+
+.chat textarea{
+    width: 70vw;
+    height: 15vh;
+}

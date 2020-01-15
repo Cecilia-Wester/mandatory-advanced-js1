@@ -11,11 +11,12 @@ class Chat extends React.Component {
             message: '', 
             messages: [], 
             internalId: 0,
-            messageLength: false,
         };
         this.onChange = this.onChange.bind(this);
         this.onSubmit = this.onSubmit.bind(this);
         this.socket = null;
+        this.scrollBar = React.createRef();
+        this.handleScrollBar = this.handleScrollBar.bind(this);
     }
 
     componentDidMount(){
@@ -23,85 +24,78 @@ class Chat extends React.Component {
         this.socket.on('messages', data => {
             console.log(data);
             this.setState({messages: data});
+            this.handleScrollBar();
         });
         this.socket.on('new_message', data =>{
             console.log(data);
-            
+            this.handleScrollBar();
             //add the message to this.state.messages
             this.setState({messages: [...this.state.messages, data]})
         });
     }
 
     componentWillUnmount(){
-        this.socket.off(this.props.logOut);
-        console.log('Disconnected')
+        this.socket.off();
+        console.log('Disconnected');
     }
     
     onChange(e){
-        if(/^.{0,200}$/.test(e.target.value)){
+        console.log(e.target.value, e.target.value.length);
+        if(e.target.value.length <= 200){
             this.setState({
-                messageLength: true, 
                 message: e.target.value});
-        } else {
-            this.setState({
-                messageLength: false
-            });
         }
     }
 
     onSubmit(e){
         e.preventDefault();
-            if(this.state.message.length === 0){
-                this.setState({messageLength: false});
-                return;
-            }
-            //console.log("onsubmit: " + e.target.value)  
-            //add to this.state.messages - a new message object with username ,id, content  
-            let msg = {id: "internal-" + this.state.internalId, username: this.props.userName, content: e.target.value}
-            this.setState({messages: [...this.state.messages, msg], internalId: this.state.internalId + 1, message: ''});
-            //send message to server   
-            this.socket.emit('message', {
-                username: this.props.userName,
-                content: this.state.message
-            }, (response) => {
-                console.log('EMITTED', response)
-            }); 
-        //}
-    }  
+        if(this.state.message.length === 0){
+            return;
+        }
+        let msg = {id: "internal-" + this.state.internalId, username: this.props.userName, content: e.target.value};
+        this.setState({messages: [...this.state.messages, msg], internalId: this.state.internalId + 1, message: ''});
+        this.socket.emit('message', {
+            username: this.props.userName,
+            content: this.state.message
+        }, (response) => {
+            console.log('EMITTED', response);
+        }); 
+    }
+
+    handleScrollBar() {
+        this.scrollBar.current.scrollTo(0, this.scrollBar.current.scrollHeight);
+    }
 
 
     render(){
-        //console.log("render triggered");
-        console.log(this.state.messageLength);
         let p; 
-        if(!this.state.messageLength){
-            p = <p>You have entered invalid amount of characters</p>;
-        }else {
+        if(this.state.message.length >= 200){
+            p = <p>Your message can only be between 1-200 characters</p>;
+        } else {
             p = '';
         }
         return (
-            <div className = 'chat'>
+            <div className = 'chat' >
                 <Helmet>
                     <title>Chat</title>
                 </Helmet>
-                <div className = 'displayMessages'>
+                <div className = 'displayMessages' ref={this.scrollBar}>
                     <ul>
                         {this.state.messages.map(data => (
-                            <div key={data.id}>
-                                <li className="self">
-                                    {data.username}: <Linkify>{emojify(data.content)}</Linkify>
-                                </li>
-                            </div>
+                            <li key={data.id}>
+                                {data.username}: <Linkify>{emojify(data.content)}</Linkify>
+                            </li>
                         ))}
                     </ul>
                 </div>
-                
-                <form>
-                    <textarea id = 'input' onChange = {this.onChange} value={this.state.message}></textarea><br />
-                    {p}
-                    <button onClick = {this.onSubmit} value={this.state.message} >Send</button>
-                    <button onClick = {this.props.logOut} >Log out</button>
-                </form>
+                <div className = 'enterMessageBox'>
+                    <form>
+                        <textarea id = 'input' onChange = {this.onChange} value={this.state.message}></textarea><br />
+                        {p}
+                        <button onClick = {this.onSubmit} value={this.state.message} >Send</button>
+                        <button onClick = {this.props.logOut} >Log out</button>
+                    </form>
+                </div>
             </div>
         );
     }
