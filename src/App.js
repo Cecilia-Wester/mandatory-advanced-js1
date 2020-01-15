@@ -22,14 +22,15 @@ class App extends React.Component {
   }
 
   logOut(){
-    this.setState({loggedIn: false})
+    this.setState({loggedIn: false});
   }
 
   render(){
     return (
       <div className = "page">
+       
         {
-          this.state.loggedIn?<Chat logOut={this.logOut}/>:<Login onSubmitUserName={this.onSubmitUserName}/>
+          this.state.loggedIn?<Chat userName = {this.state.userName} logOut={this.logOut}/>:<Login onSubmitUserName={this.onSubmitUserName}/>
         }
       </div>
     );

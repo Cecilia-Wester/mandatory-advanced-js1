@@ -1,4 +1,5 @@
 import React from 'react';
+import { Helmet } from 'react-helmet';
 
 class Login extends React.Component {
     constructor(props){
@@ -23,13 +24,16 @@ class Login extends React.Component {
 
     render(){
         return(
-            <>
+            <div className = 'logIn'>
+            <Helmet>
+                <title>Log in</title>
+            </Helmet>
                 <p>Enter username:</p>
                 <form onSubmit={this.onSubmit}>
                     <input value={this.props.userName} type='text' onChange= {this.onChange}/><br />
                     <button >Log in</button>
                 </form>
-            </>
+            </div>
         );
     }
 }
