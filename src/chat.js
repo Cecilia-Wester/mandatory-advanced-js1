@@ -24,11 +24,9 @@ class Chat extends React.Component {
         this.socket.on('messages', data => {
             console.log(data);
             this.setState({messages: data});
-            this.handleScrollBar();
         });
         this.socket.on('new_message', data =>{
             console.log(data);
-            this.handleScrollBar();
             //add the message to this.state.messages
             this.setState({messages: [...this.state.messages, data]})
         });
@@ -37,6 +35,10 @@ class Chat extends React.Component {
     componentWillUnmount(){
         this.socket.off();
         console.log('Disconnected');
+    }
+
+    componentDidUpdate() {
+        this.handleScrollBar();
     }
     
     onChange(e){
